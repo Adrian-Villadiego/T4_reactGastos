@@ -35,7 +35,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API}/login`, { // 🔥 AQUÍ EL CAMBIO
+      const res = await fetch(`${API}/login`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
