@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite'
-import react, { reactCompilerPreset } from '@vitejs/plugin-react'
-import babel from '@rolldown/plugin-babel'
+import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   plugins: [
     react(),
-    babel({ presets: [reactCompilerPreset()] }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: [
@@ -20,7 +18,7 @@ export default defineConfig({
       workbox: {
         navigateFallback: '/index.html',
         globPatterns: ['**/*.{js,css,html,ico,png,jpg,svg}']
-        },
+      },
       manifest: {
         name: 'My Awesome App',
         short_name: 'MyApp',
@@ -29,7 +27,6 @@ export default defineConfig({
         display: 'standalone',
         background_color: '#ffffff',
         theme_color: '#ffffff',
-
         screenshots: [
           {
             src: '/img/logjuni.jpg',
@@ -44,7 +41,6 @@ export default defineConfig({
             form_factor: 'wide'
           }
         ],
-
         icons: [
           {
             src: '/img/bomba.jpg',
