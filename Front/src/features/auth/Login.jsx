@@ -5,6 +5,9 @@ import { FaEye, FaEyeSlash, FaWallet } from "react-icons/fa";
 const Login = () => {
   const navigate = useNavigate();
 
+  // ✅ URL del backend desde .env
+  const API = import.meta.env.VITE_API_URL;
+
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -32,7 +35,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:3000/login", {
+      const res = await fetch(`${API}/login`, { // 🔥 AQUÍ EL CAMBIO
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -70,7 +70,4 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// 🚀 SERVER
-app.listen(process.env.PORT, () => {
-  console.log("Servidor en puerto", process.env.PORT);
-});
+export default app;

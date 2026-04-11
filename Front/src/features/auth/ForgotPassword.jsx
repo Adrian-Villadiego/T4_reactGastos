@@ -23,7 +23,7 @@ const ForgotPassword = () => {
       className="d-flex justify-content-center align-items-center"
       style={{
         minHeight: "100vh",
-        padding: "20px", // 🔥 espacio en móvil
+        padding: "20px",
         background: "linear-gradient(135deg, #081c15, #1b4332, #2d6a4f)",
       }}
     >
