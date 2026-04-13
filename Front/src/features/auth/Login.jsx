@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash, FaWallet } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const navigate = useNavigate();
 
-  // ✅ URL del backend desde .env
   const API = import.meta.env.VITE_API_URL;
 
   const [form, setForm] = useState({
@@ -18,9 +17,7 @@ const Login = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/dashboard");
-    }
+    if (token) navigate("/dashboard");
   }, [navigate]);
 
   const handleChange = (e) => {
@@ -35,7 +32,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch(`${API}/login`, { 
+      const res = await fetch(`${API}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,150 +47,67 @@ const Login = () => {
         return;
       }
 
+      // 🔐 guardar token
       localStorage.setItem("token", data.token);
 
+      // 🔄 avisar a la app
       window.dispatchEvent(new Event("authChange"));
 
       navigate("/dashboard");
 
-    } catch (error) {
+    } catch (err) {
+      console.error("❌ ERROR LOGIN:", err);
       setError("Error de conexión");
     }
   };
 
   return (
-    <div
-      className="d-flex justify-content-center align-items-center"
-      style={{
-        minHeight: "100vh",
-        padding: "20px",
-        background: "linear-gradient(135deg, #081c15, #1b4332, #2d6a4f)",
-        fontFamily: "Segoe UI, sans-serif",
-      }}
-    >
-      <div
-        className="p-4 shadow-lg w-100"
-        style={{
-          maxWidth: "380px",
-          borderRadius: "20px",
-          background: "rgba(255, 255, 255, 0.08)",
-          backdropFilter: "blur(12px)",
-          border: "1px solid rgba(255,255,255,0.1)",
-          color: "#fff",
-        }}
-      >
-        <div className="text-center mb-4">
-          <FaWallet size={32} className="mb-2 text-success" />
+    <div className="container mt-5">
+      <h2>Iniciar Sesión</h2>
 
-          <h3
-            className="fw-bold"
-            style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)" }}
-          >
-            Control de Gastos
-          </h3>
+      <form onSubmit={handleSubmit}>
 
-          <p style={{ fontSize: "13px", opacity: 0.7 }}>
-            Administra tu dinero fácilmente
-          </p>
-        </div>
+        <input
+          type="email"
+          name="email"
+          placeholder="Correo"
+          className="form-control mb-3"
+          value={form.email}
+          onChange={handleChange}
+          required
+        />
 
-        <form onSubmit={handleSubmit}>
-
+        <div className="input-group mb-3">
           <input
-            type="email"
-            name="email"
-            className="form-control mb-3"
-            placeholder="Correo electrónico"
-            value={form.email}
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Contraseña"
+            className="form-control"
+            value={form.password}
             onChange={handleChange}
             required
-            style={{
-              borderRadius: "10px",
-              padding: "10px",
-              fontSize: "14px",
-            }}
           />
 
-          <div className="input-group mb-2">
-            <input
-              type={showPassword ? "text" : "password"}
-              name="password"
-              className="form-control"
-              placeholder="Contraseña"
-              value={form.password}
-              onChange={handleChange}
-              required
-              style={{
-                borderRadius: "10px 0 0 10px",
-                padding: "10px",
-                fontSize: "14px",
-              }}
-            />
-
-            <button
-              type="button"
-              className="btn btn-success px-3"
-              style={{
-                borderRadius: "0 10px 10px 0",
-              }}
-              onClick={() => setShowPassword(!showPassword)}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </button>
-          </div>
-
-          <div className="text-center mb-3">
-            <Link
-              to="/forgot-password"
-              style={{
-                fontSize: "12px",
-                color: "#74c69d",
-                textDecoration: "none",
-              }}
-            >
-              ¿Olvidaste tu contraseña?
-            </Link>
-          </div>
-
-          {error && (
-            <div
-              className="mb-3 text-center"
-              style={{
-                background: "rgba(255,0,0,0.2)",
-                padding: "8px",
-                borderRadius: "8px",
-                fontSize: "13px",
-              }}
-            >
-              {error}
-            </div>
-          )}
-
           <button
-            className="btn w-100"
-            style={{
-              background: "#52b788",
-              border: "none",
-              borderRadius: "10px",
-              padding: "10px",
-              fontWeight: "bold",
-              fontSize: "15px",
-            }}
+            type="button"
+            className="btn btn-success"
+            onClick={() => setShowPassword(!showPassword)}
           >
-            Ingresar
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
           </button>
-
-        </form>
-
-        <div className="mt-3 text-center">
-          <span style={{ fontSize: "13px" }}>
-            ¿No tienes cuenta?{" "}
-            <Link to="/register" style={{ color: "#95d5b2" }}>
-              Regístrate
-            </Link>
-          </span>
         </div>
-      </div>
+
+        {error && <p className="text-danger">{error}</p>}
+
+        <button className="btn btn-primary w-100">
+          Ingresar
+        </button>
+
+      </form>
+
+      <p className="mt-3">
+        ¿No tienes cuenta? <Link to="/register">Regístrate</Link>
+      </p>
     </div>
   );
 };
