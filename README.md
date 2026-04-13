@@ -167,25 +167,25 @@ T4 REACT/
 ## 📸 Screenshots
 
 ### 🏠 Inicio
-![Inicio](./public/img/content.png)
+![Inicio](./content.png)
 
 ### 💰 Gastos
-![Gastos](./public/img/gasto.png)
+![Gastos](./gasto.png)
 
 ### 🔐 Login
-![Login](./public/img/login.png)
+![Login](./login.png)
 
 ### 📝 Registro
-![Registro](./public/img/register.png)
+![Registro](./register.png)
 
 ### 🔑 Recuperar contraseña
-![Olvidaste contraseña](./public/img/olvidaste.png)
+![Olvidaste contraseña](./olvidaste.png)
 
 ### 🔌 API
-![API](./public/img/api.png)
+![API](/api.png)
 
 ### 📞 Contacto
-![Contacto](./public/img/contactanos.png)
+![Contacto](contactanos.png)
 ---
 
 ## ⚠️ Datos Importantes
