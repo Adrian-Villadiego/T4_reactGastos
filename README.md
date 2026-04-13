@@ -103,9 +103,10 @@ npm run dev
 ## 🏗️ Arquitectura del Proyecto
 
 ```id="xqz1zp"
-T4 REACT/
+T4_reactGastos/
 │
 ├── backend/
+│   ├── api/
 │   ├── node_modules/
 │   ├── .env
 │   ├── package.json
@@ -116,35 +117,57 @@ T4 REACT/
 │   ├── dist/
 │   ├── node_modules/
 │   ├── public/
+│   │   ├── img/
+│   │   │   └── bombajpg
+│   │   ├── favicon.svg
+│   │   ├── iconavion.png
+│   │   ├── icons.svg
+│   │   ├── otraimg.png
+│   │   ├── pwa.png
+│   │   └── robots.txt
+│   │
 │   ├── src/
-│   │   ├── assets/
-│   │   │   ├── hero.png
-│   │   │   ├── react.svg
-│   │   │   └── vite.svg
 │   │   ├── features/
 │   │   │   ├── api/
-│   │   │   │   ├── ApiRvC_Axios.jsx
-│   │   │   │   └── ApiRvC.jsx
+│   │   │   │   └── components/
+│   │   │   │       ├── ApiRvC_Axios.jsx
+│   │   │   │       └── ApiRvC.jsx
+│   │   │   │
 │   │   │   ├── auth/
+│   │   │   │   ├── ForgotPassword.jsx
 │   │   │   │   ├── Login.jsx
-│   │   │   │   ├── Register.jsx
-│   │   │   │   └── ForgotPassword.jsx
+│   │   │   │   └── Register.jsx
+│   │   │   │
 │   │   │   └── dash/
-│   │   │       └── Dashboard.jsx
+│   │   │       └── components/
+│   │   │           └── Dashboard.jsx
+│   │   │
 │   │   ├── layout/
 │   │   ├── shared/
 │   │   │   └── styles/
 │   │   │       ├── App.css
 │   │   │       └── index.css
+│   │   │
 │   │   ├── App.jsx
 │   │   └── main.jsx
-│   ├── .gitignore
+│   │
+│   ├── .env
 │   ├── eslint.config.js
 │   ├── index.html
 │   ├── package.json
 │   ├── package-lock.json
-│   ├── README.md
 │   └── vite.config.js
+│
+├── api.png
+├── contactanos.png
+├── content.png
+├── gasto.png
+├── login.png
+├── olvidaste.png
+├── register.png
+│
+├── .gitignore
+└── README.md
 ```
 
 ---
