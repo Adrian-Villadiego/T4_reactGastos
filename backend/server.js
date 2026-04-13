@@ -7,85 +7,109 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// 🔐 Validar variables de entorno
+if (!process.env.MONGO_URI || !process.env.JWT_SECRET) {
+  console.error("❌ Faltan variables de entorno (MONGO_URI o JWT_SECRET)");
+  process.exit(1);
+}
+
 const app = express();
-app.use(cors());
+
+// 🔥 CORS configurado para producción
+app.use(cors({
+  origin: process.env.FRONTEND_URL || "*"
+}));
+
 app.use(express.json());
 
 // 🔌 Mongo
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("✅ Mongo conectado"))
-.catch(err => console.log("❌ Error Mongo:", err));
+  .then(() => console.log("✅ Mongo conectado"))
+  .catch(err => console.log("❌ Error Mongo:", err));
 
 // 📄 Modelo
 const userSchema = new mongoose.Schema({
-email: { type: String, required: true, unique: true },
-password: { type: String, required: true },
+  email: { 
+    type: String, 
+    required: true, 
+    unique: true,
+    lowercase: true,
+    trim: true
+  },
+  password: { 
+    type: String, 
+    required: true 
+  },
 });
 
 const User = mongoose.model("User", userSchema);
 
 // 🔐 REGISTER
 app.post("/register", async (req, res) => {
-try {
-const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-```
-const exist = await User.findOne({ email });
-if (exist) {
-  return res.status(400).json({ msg: "Usuario ya existe" });
-}
+    if (!email || !password) {
+      return res.status(400).json({ msg: "Email y password son obligatorios" });
+    }
 
-const hash = await bcrypt.hash(password, 10);
+    const exist = await User.findOne({ email });
+    if (exist) {
+      return res.status(400).json({ msg: "Usuario ya existe" });
+    }
 
-const user = new User({ email, password: hash });
-await user.save();
+    const hash = await bcrypt.hash(password, 10);
 
-res.json({ msg: "Usuario creado" });
-```
+    const user = new User({ email, password: hash });
+    await user.save();
 
-} catch (error) {
-res.status(500).json({ error: error.message });
-}
+    res.json({ msg: "Usuario creado correctamente" });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 // 🔑 LOGIN
 app.post("/login", async (req, res) => {
-try {
-const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-```
-const user = await User.findOne({ email });
-if (!user) {
-  return res.status(400).json({ msg: "Usuario no existe" });
-}
+    if (!email || !password) {
+      return res.status(400).json({ msg: "Email y password son obligatorios" });
+    }
 
-const valid = await bcrypt.compare(password, user.password);
-if (!valid) {
-  return res.status(400).json({ msg: "Datos inválidos" });
-}
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: "Usuario no existe" });
+    }
 
-const token = jwt.sign(
-  { id: user._id },
-  process.env.JWT_SECRET,
-  { expiresIn: "1h" }
-);
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      return res.status(400).json({ msg: "Datos inválidos" });
+    }
 
-res.json({ token });
-```
+    const token = jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
-} catch (error) {
-res.status(500).json({ error: error.message });
-}
+    res.json({ token });
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// 🌐 Ruta de prueba (IMPORTANTE para verificar que funciona)
+// 🌐 Ruta de prueba
 app.get("/", (req, res) => {
-res.send("🚀 Backend funcionando correctamente");
+  res.send("🚀 Backend funcionando correctamente");
 });
 
-// 🚀 LEVANTAR SERVIDOR (CLAVE PARA RAILWAY)
+// 🚀 Servidor
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-console.log("🔥 Servidor corriendo en puerto", PORT);
+  console.log(`🔥 Servidor corriendo en puerto ${PORT}`);
 });
