@@ -23,16 +23,20 @@ const Register = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      await axios.post("http://localhost:3000/register", form);
-      setSuccess("Usuario registrado correctamente");
-      setForm({ email: "", password: "" });
-    } catch (err) {
-      setError(err.response?.data?.msg || "Error al registrar");
-    }
-  };
+  try {
+    const API = import.meta.env.VITE_API_URL;
+
+    await axios.post(`${API}/register`, form);
+
+    setSuccess("Usuario registrado correctamente");
+    setForm({ email: "", password: "" });
+
+  } catch (err) {
+    setError(err.response?.data?.msg || "Error al registrar");
+  }
+};
 
   return (
     <div
