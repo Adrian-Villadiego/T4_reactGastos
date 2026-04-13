@@ -182,7 +182,6 @@ const Login = () => {
           >
             Ingresar
           </button>
-
         </form>
 
         <div className="mt-3 text-center">
