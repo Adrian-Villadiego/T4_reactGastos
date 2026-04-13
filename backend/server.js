@@ -15,9 +15,11 @@ if (!process.env.MONGO_URI || !process.env.JWT_SECRET) {
 
 const app = express();
 
-// 🔥 CORS configurado para producción
+// 🔥 CORS (modo debug abierto)
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "*"
+  origin: "*", // 🔥 permitir todo temporalmente
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(express.json());
@@ -47,6 +49,8 @@ const User = mongoose.model("User", userSchema);
 // 🔐 REGISTER
 app.post("/register", async (req, res) => {
   try {
+    console.log("📩 REGISTER:", req.body); // 🔥 DEBUG
+
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -66,6 +70,7 @@ app.post("/register", async (req, res) => {
     res.json({ msg: "Usuario creado correctamente" });
 
   } catch (error) {
+    console.log("❌ ERROR REGISTER:", error); // 🔥 DEBUG
     res.status(500).json({ error: error.message });
   }
 });
@@ -73,6 +78,8 @@ app.post("/register", async (req, res) => {
 // 🔑 LOGIN
 app.post("/login", async (req, res) => {
   try {
+    console.log("📩 LOGIN:", req.body); // 🔥 DEBUG
+
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -98,6 +105,7 @@ app.post("/login", async (req, res) => {
     res.json({ token });
 
   } catch (error) {
+    console.log("❌ ERROR LOGIN:", error); // 🔥 DEBUG
     res.status(500).json({ error: error.message });
   }
 });
