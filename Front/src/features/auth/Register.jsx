@@ -24,18 +24,33 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    console.log("📤 Enviando:", form); // 🔥 DEBUG
+
     try {
-      await axios.post(
-        "https://t4-reactgastos.onrender.com/register",
-        form
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/register`,
+        form,
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
       );
-    
-      setSuccess("Usuario registrado correctamente");
+
+      console.log("✅ RESPUESTA:", res.data); // 🔥 DEBUG
+
+      setSuccess(res.data.msg || "Usuario registrado correctamente");
       setForm({ email: "", password: "" });
-    
+
     } catch (err) {
-      setError(err.response?.data?.msg || "Error al registrar");
+      console.error("❌ ERROR FRONT:", err.response || err); // 🔥 DEBUG
+
+      setError(
+        err.response?.data?.msg ||
+        err.response?.data?.error ||
+        "Error al registrar"
+      );
     }
   };
 
@@ -44,7 +59,7 @@ const Register = () => {
       className="d-flex justify-content-center align-items-center"
       style={{
         minHeight: "100vh",
-        padding: "20px", // 🔥 espacio en móvil
+        padding: "20px",
         background: "linear-gradient(135deg, #081c15, #1b4332, #2d6a4f)",
         fontFamily: "Segoe UI, sans-serif",
       }}
@@ -63,10 +78,7 @@ const Register = () => {
         <div className="text-center mb-4">
           <FaUserPlus size={32} className="mb-2 text-success" />
 
-          <h3
-            className="fw-bold"
-            style={{ fontSize: "clamp(1.4rem, 4vw, 1.8rem)" }}
-          >
+          <h3 className="fw-bold">
             Crear Cuenta
           </h3>
 
@@ -85,11 +97,6 @@ const Register = () => {
             value={form.email}
             onChange={handleChange}
             required
-            style={{
-              borderRadius: "10px",
-              padding: "10px",
-              fontSize: "14px",
-            }}
           />
 
           <div className="input-group mb-3">
@@ -101,19 +108,11 @@ const Register = () => {
               value={form.password}
               onChange={handleChange}
               required
-              style={{
-                borderRadius: "10px 0 0 10px",
-                padding: "10px",
-                fontSize: "14px",
-              }}
             />
 
             <button
               type="button"
               className="btn btn-success px-3"
-              style={{
-                borderRadius: "0 10px 10px 0",
-              }}
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -121,47 +120,18 @@ const Register = () => {
           </div>
 
           {error && (
-            <div
-              className="mb-3 text-center"
-              style={{
-                background: "rgba(255,0,0,0.2)",
-                padding: "8px",
-                borderRadius: "8px",
-                fontSize: "13px",
-              }}
-            >
+            <div className="mb-3 text-center text-danger">
               {error}
             </div>
           )}
 
           {success && (
-            <div
-              className="mb-3 text-center"
-              style={{
-                background: "rgba(0,255,100,0.2)",
-                padding: "8px",
-                borderRadius: "8px",
-                fontSize: "13px",
-              }}
-            >
+            <div className="mb-3 text-center text-success">
               {success}
             </div>
           )}
 
-          <button
-            className="btn w-100"
-            style={{
-              background: "#52b788",
-              border: "none",
-              borderRadius: "10px",
-              padding: "10px",
-              fontWeight: "bold",
-              fontSize: "15px",
-              transition: "0.3s",
-            }}
-            onMouseOver={(e) => (e.target.style.background = "#40916c")}
-            onMouseOut={(e) => (e.target.style.background = "#52b788")}
-          >
+          <button className="btn btn-success w-100">
             Registrarse
           </button>
 
